@@ -1,8 +1,6 @@
 package com.vodafone.iot.controllers;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -10,10 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -110,6 +106,22 @@ public class DeviceManagementControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.devices").exists())
 				.andExpect(MockMvcResultMatchers.jsonPath("$.devices").isNotEmpty())
 				.andExpect(MockMvcResultMatchers.jsonPath("$.totalCount").value(devicesList.size()));
+	}
+	
+	@Test
+	public void testGetDevicesAvailableForSale_InvalidInputs() throws Exception {
+
+		PagingRequestDto pagingRequestDto = new PagingRequestDto(0, 10);
+
+		when(deviceManagementService.getDevicesAvailableForSale(any(PagingRequestDto.class)))
+				.thenThrow(IllegalArgumentException.class);
+
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.post("/getDevicesAvailableForSale")
+						.content(asJsonString(pagingRequestDto)).contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest()).andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage").exists())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.errorCode").exists());
 	}
 	//
 	// @Test

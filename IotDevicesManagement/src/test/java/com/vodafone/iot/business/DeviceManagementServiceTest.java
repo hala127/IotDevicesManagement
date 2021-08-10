@@ -10,12 +10,15 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -29,11 +32,10 @@ import com.vodafone.iot.entities.SimCard;
 import com.vodafone.iot.entities.SimStatus;
 import com.vodafone.iot.repos.DeviceRepository;
 import com.vodafone.iot.repos.SimCardRepository;
+import com.vodafone.iot.repos.SimStatusRepository;
 
-@AutoConfigureMockMvc
-// @SpringBootTest
-//@MockitoSettings()
-@ExtendWith(MockitoExtension.class)
+
+//@ExtendWith(MockitoExtension.class)
 public class DeviceManagementServiceTest {
 
 	@Mock
@@ -41,10 +43,18 @@ public class DeviceManagementServiceTest {
 
 	@Mock
 	SimCardRepository simCardRepo;
+	
+	@Mock
+	SimStatusRepository simStatusRepo;
 
 	@InjectMocks
 	DeviceManagementService service;
 
+	@BeforeEach
+	public void setup() {
+		MockitoAnnotations.openMocks(this);
+	}
+	
 	public static SimStatus SIM_STATUS_WAITING = new SimStatus(SimStatusEnum.WaitingForActivation.getId(),
 			SimStatusEnum.WaitingForActivation.name());
 	public static SimStatus SIM_STATUS_ACTIVE = new SimStatus(SimStatusEnum.Active.getId(),
@@ -55,11 +65,6 @@ public class DeviceManagementServiceTest {
 	public static Device DEVICE_1 = new Device(1, 25, SIM_1);
 	public static Device DEVICE_2 = new Device(2, 80, SIM_2);
 	public static Device DEVICE_3 = new Device(3, 20, SIM_3);
-
-//	@BeforeEach
-//	public void setup() {
-//		MockitoAnnotations.initMocks(this);
-//	}
 
 	@Test
 	public void testGetDevicesWaitingForActivation_WithResultList() {
