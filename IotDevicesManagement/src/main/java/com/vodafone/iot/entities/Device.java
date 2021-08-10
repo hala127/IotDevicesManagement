@@ -24,11 +24,11 @@ public class Device {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+	private int temperature;
+
 	@OneToOne(fetch= FetchType.LAZY)
 	@JoinColumn(name = "sim_id", referencedColumnName = "id")
 	@JsonIgnore
 	@ToString.Exclude
 	private SimCard simCard;
-	private int temperature;
 }

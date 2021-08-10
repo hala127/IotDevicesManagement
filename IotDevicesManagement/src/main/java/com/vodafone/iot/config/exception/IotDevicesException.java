@@ -4,10 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@SuppressWarnings("serial")
 @Data
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 public class IotDevicesException extends RuntimeException {
 
 	private String errorMessage;
@@ -17,5 +16,5 @@ public class IotDevicesException extends RuntimeException {
 		this.errorCode = 500;
 		this.errorMessage = "An error occurred while loading data.";
 	}
-	
+
 }

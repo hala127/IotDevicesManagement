@@ -24,6 +24,16 @@ public class IotDevicesExceptionHandler {
 		return new IotDevicesErrorResponse(ex.getErrorMessage(), ex.getErrorCode(), new Date());
 	}
 
+	@ExceptionHandler(ItemNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ResponseBody
+	public IotDevicesErrorResponse processNotFoundError(ItemNotFoundException ex) {
+		log.error("ItemNotFoundException: ", ex);
+		ex.printStackTrace();
+
+		return new IotDevicesErrorResponse(ex.getErrorMessage(), ex.getErrorCode(), new Date());
+	}
+
 	@ExceptionHandler(IllegalArgumentException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ResponseBody

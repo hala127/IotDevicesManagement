@@ -1,5 +1,7 @@
 package com.vodafone.iot.dtos.requests;
 
+import com.vodafone.iot.dtos.SimCardDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,7 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeviceConfigurationRequest extends DeviceBaseRequest {
+public class DeviceConfigurationRequest {
 
-	private int simId;
+	private int deviceId;
+	private int temperature;
+	private SimCardDto simCard;
 }

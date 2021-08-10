@@ -11,10 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @JsonInclude(Include.NON_NULL)
-public class SimCardDto {
-
+public class SimCardStatusDto {
 	private int id;
-	private String operatorCode;
-	private String country;
-	private SimCardStatusDto status;
+	private String name;
 }

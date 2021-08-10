@@ -37,4 +37,12 @@ public class SimCard {
 	@ToString.Exclude
 	private Device device;
 
+	public SimCard(int id, String operatorCode, String country, SimStatus status) {
+		super();
+		this.id = id;
+		this.operatorCode = operatorCode;
+		this.country = country;
+		this.status = status;
+	}
+
 }
