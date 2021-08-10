@@ -38,8 +38,13 @@ public class DeviceManagementService {
 	@Autowired
 	Environment env;
 
-	public DevicesListDto getDevicesWaitingForActivation(PagingRequestDto pagingDto) {
-		Pageable pageInfo = PageRequest.of(pagingDto.getPageNumber(), pagingDto.getPageSize());
+	public DevicesListDto getDevicesWaitingForActivation(PagingRequestDto pagingRequestDto) {
+
+		if (pagingRequestDto.getPageNumber() <= 0) {
+			throw new IllegalArgumentException();
+		}
+
+		Pageable pageInfo = PageRequest.of(pagingRequestDto.getPageNumber() - 1, pagingRequestDto.getPageSize());
 
 		Page<Device> devicesPage = deviceRepo
 				.findAllBySimCardIdNotNullAndSimCardStatusId(SimStatusEnum.WaitingForActivation.getId(), pageInfo);
@@ -55,15 +60,18 @@ public class DeviceManagementService {
 		return new DevicesListDto(totalCount, devicesDtos);
 	}
 
-	public DevicesListDto getDevicesAvailableForSale(PagingRequestDto pagingDto) {
+	public DevicesListDto getDevicesAvailableForSale(PagingRequestDto pagingRequestDto) {
 
-		Pageable pageInfo = PageRequest.of(pagingDto.getPageNumber(), pagingDto.getPageSize());
+		if (pagingRequestDto.getPageNumber() <= 0) {
+			throw new IllegalArgumentException();
+		}
+		Pageable pageInfo = PageRequest.of(pagingRequestDto.getPageNumber() - 1, pagingRequestDto.getPageSize());
 
 		int maxTempAllowed = Integer.parseInt(env.getRequiredProperty("device.temperature.max.value"));
 		int minTempAllowed = Integer.parseInt(env.getRequiredProperty("device.temperature.min.value"));
 
-		Page<Device> devicesPage = deviceRepo.findAllByTemperatureBetweenAndSimCardIdNotNull(minTempAllowed,
-				maxTempAllowed, pageInfo);
+		Page<Device> devicesPage = deviceRepo
+				.findAllByTemperatureBetweenAndSimCardIdNotNullOrderByIdDesc(minTempAllowed, maxTempAllowed, pageInfo);
 
 		long totalCount = devicesPage.getTotalElements();
 		log.info("devices available for sale: " + totalCount);

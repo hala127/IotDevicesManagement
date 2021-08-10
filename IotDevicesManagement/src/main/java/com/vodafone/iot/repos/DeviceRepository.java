@@ -10,7 +10,7 @@ import com.vodafone.iot.entities.Device;
 @Repository
 public interface DeviceRepository extends JpaRepository<Device, Integer> {
 
-	public Page<Device> findAllByTemperatureBetweenAndSimCardIdNotNull(int minTemp, int maxTemp, Pageable pageInfo);
+	public Page<Device> findAllByTemperatureBetweenAndSimCardIdNotNullOrderByIdDesc(int minTemp, int maxTemp, Pageable pageInfo);
 
 	public Page<Device> findAllBySimCardIdNotNullAndSimCardStatusId(int statusId, Pageable pageInfo);
 
