@@ -1,3 +1,7 @@
+#server config files
+RemoteSystemsTempFiles/
+.metadata/
+.recommenders/
 # Compiled class file
 *.class
 
