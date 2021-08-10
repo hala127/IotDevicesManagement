@@ -1,6 +1,8 @@
 package com.vodafone.iot.business;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -32,7 +34,7 @@ import com.vodafone.iot.repos.DeviceRepository;
 import com.vodafone.iot.repos.SimCardRepository;
 
 //@ExtendWith(MockitoExtension.class)
-@SpringBootTest
+//@SpringBootTest
 public class DeviceManagementServiceTest {
 
 	@Mock
@@ -69,7 +71,16 @@ public class DeviceManagementServiceTest {
 
 		DevicesListDto result = service.getDevicesWaitingForActivation(new PagingRequestDto(1, 10));
 
+		assertNotEquals(null, result);
 		assertEquals(devices.getTotalElements(), result.getTotalCount());
 		assertEquals(result.getDevices().get(0).getId(), DEVICE_1.getId());
 	}
+
+	@Test
+	public void testGetDevicesWaitingForActivation_InvalidInputs() {
+
+		assertThrows(IllegalArgumentException.class,
+				() -> service.getDevicesWaitingForActivation(new PagingRequestDto(0, 10)));
+	}
+	
 }
