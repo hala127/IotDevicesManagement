@@ -6,6 +6,10 @@ Spring Boot
 Maven
 SQL server database
 
+The application uses sql server database which could be created through the provided DbScript.sql file.
+
+To run the application import it to eclipse and run it as a spring boot application.
+
 The apis could be viewed through swagger2 after running or deploying the application via link:
    http://localhost:8080/swagger-ui.html
    
