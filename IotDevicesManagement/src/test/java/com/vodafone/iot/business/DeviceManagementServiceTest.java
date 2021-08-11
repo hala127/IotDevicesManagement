@@ -1,5 +1,6 @@
 package com.vodafone.iot.business;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -9,15 +10,14 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -26,6 +26,8 @@ import org.springframework.data.domain.Pageable;
 
 import com.vodafone.iot.config.enums.SimStatusEnum;
 import com.vodafone.iot.dtos.DevicesListDto;
+import com.vodafone.iot.dtos.SimCardDto;
+import com.vodafone.iot.dtos.requests.DeviceConfigurationRequest;
 import com.vodafone.iot.dtos.requests.PagingRequestDto;
 import com.vodafone.iot.entities.Device;
 import com.vodafone.iot.entities.SimCard;
@@ -33,7 +35,6 @@ import com.vodafone.iot.entities.SimStatus;
 import com.vodafone.iot.repos.DeviceRepository;
 import com.vodafone.iot.repos.SimCardRepository;
 import com.vodafone.iot.repos.SimStatusRepository;
-
 
 //@ExtendWith(MockitoExtension.class)
 public class DeviceManagementServiceTest {
@@ -43,7 +44,7 @@ public class DeviceManagementServiceTest {
 
 	@Mock
 	SimCardRepository simCardRepo;
-	
+
 	@Mock
 	SimStatusRepository simStatusRepo;
 
@@ -54,7 +55,7 @@ public class DeviceManagementServiceTest {
 	public void setup() {
 		MockitoAnnotations.openMocks(this);
 	}
-	
+
 	public static SimStatus SIM_STATUS_WAITING = new SimStatus(SimStatusEnum.WaitingForActivation.getId(),
 			SimStatusEnum.WaitingForActivation.name());
 	public static SimStatus SIM_STATUS_ACTIVE = new SimStatus(SimStatusEnum.Active.getId(),
@@ -103,6 +104,46 @@ public class DeviceManagementServiceTest {
 	public void testGetDevicesWaitingForActivation_EmptyBody() {
 
 		assertThrows(IllegalArgumentException.class, () -> service.getDevicesWaitingForActivation(null));
+	}
+
+	@Test
+	public void testupdateDeviceConfiguration() {
+		DeviceConfigurationRequest deviceConfigRequest = new DeviceConfigurationRequest();
+		deviceConfigRequest.setDeviceId(DEVICE_1.getId());
+		deviceConfigRequest.setTemperature(DEVICE_1.getTemperature());
+		SimCardDto simCardDto = new SimCardDto();
+		simCardDto.setId(SIM_1.getId());
+		deviceConfigRequest.setSimCard(simCardDto);
+
+		when(deviceRepo.findById(anyInt())).thenReturn(Optional.of(DEVICE_1));
+		when(simCardRepo.findById(anyInt())).thenReturn(Optional.of(SIM_1));
+		when(simStatusRepo.findById(anyInt())).thenReturn(Optional.of(SIM_STATUS_WAITING));
+
+		assertThatCode(() -> service.updateDeviceConfiguration(deviceConfigRequest)).doesNotThrowAnyException();
+	}
+
+	@Test
+	public void testupdateDeviceConfiguration_InvalidDeviceId() {
+		DeviceConfigurationRequest deviceConfigRequest = new DeviceConfigurationRequest();
+		deviceConfigRequest.setDeviceId(-1);
+
+		assertThrows(IllegalArgumentException.class, () -> service.updateDeviceConfiguration(deviceConfigRequest));
+	}
+
+	@Test
+	public void testupdateDeviceConfiguration_InvalidSimCardId() {
+		DeviceConfigurationRequest deviceConfigRequest = new DeviceConfigurationRequest();
+		SimCardDto simCard = new SimCardDto();
+		simCard.setId(0);
+		deviceConfigRequest.setSimCard(simCard);
+
+		assertThrows(IllegalArgumentException.class, () -> service.updateDeviceConfiguration(deviceConfigRequest));
+	}
+
+	@Test
+	public void testupdateDeviceConfiguration_EmptyBody() {
+
+		assertThrows(IllegalArgumentException.class, () -> service.updateDeviceConfiguration(null));
 	}
 
 }

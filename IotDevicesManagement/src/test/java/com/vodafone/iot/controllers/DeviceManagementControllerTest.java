@@ -1,6 +1,8 @@
 package com.vodafone.iot.controllers;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -25,6 +27,7 @@ import com.vodafone.iot.dtos.DeviceDto;
 import com.vodafone.iot.dtos.DevicesListDto;
 import com.vodafone.iot.dtos.SimCardDto;
 import com.vodafone.iot.dtos.SimCardStatusDto;
+import com.vodafone.iot.dtos.requests.DeviceConfigurationRequest;
 import com.vodafone.iot.dtos.requests.PagingRequestDto;
 
 @WebMvcTest(DeviceManagementController.class)
@@ -107,7 +110,7 @@ public class DeviceManagementControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.devices").isNotEmpty())
 				.andExpect(MockMvcResultMatchers.jsonPath("$.totalCount").value(devicesList.size()));
 	}
-	
+
 	@Test
 	public void testGetDevicesAvailableForSale_InvalidInputs() throws Exception {
 
@@ -123,22 +126,54 @@ public class DeviceManagementControllerTest {
 				.andExpect(status().isBadRequest()).andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage").exists())
 				.andExpect(MockMvcResultMatchers.jsonPath("$.errorCode").exists());
 	}
-	//
-	// @Test
-	// public void testRemoveDeviceConfiguration() throws Exception {
-	//
-	// DeviceBaseRequest device = new DeviceBaseRequest(1);
-	// doNothing().when(deviceManagementService.removeDeviceSimCard(any(DeviceBaseRequest.class)));
-	//
-	// this.mockMvc
-	// .perform(MockMvcRequestBuilders.post("/getDevicesAvailableForSale")
-	// .content(asJsonString(pagingRequestDto)).contentType(MediaType.APPLICATION_JSON)
-	// .accept(MediaType.APPLICATION_JSON))
-	// .andExpect(status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.totalCount").exists())
-	// .andExpect(MockMvcResultMatchers.jsonPath("$.devices").exists())
-	// .andExpect(MockMvcResultMatchers.jsonPath("$.devices").isNotEmpty())
-	// .andExpect(MockMvcResultMatchers.jsonPath("$.totalCount").value(devicesList.size()));
-	// }
+
+	@Test
+	public void testGetDevicesAvailableForSale_EmptyBody() throws Exception {
+
+		when(deviceManagementService.getDevicesAvailableForSale(any(PagingRequestDto.class)))
+				.thenThrow(IllegalArgumentException.class);
+
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.post("/getDevicesAvailableForSale").content("{}")
+						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest()).andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage").exists())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.errorCode").exists());
+	}
+
+	@Test
+	public void testUpdateDeviceConfiguration() throws Exception {
+
+		DeviceConfigurationRequest deviceConfigRequest = new DeviceConfigurationRequest();
+		deviceConfigRequest.setDeviceId(DEVICE_1.getId());
+		deviceConfigRequest.setTemperature(DEVICE_1.getTemperature());
+		deviceConfigRequest.setSimCard(SIM_1);
+
+		doNothing().when(deviceManagementService).updateDeviceConfiguration(deviceConfigRequest);
+
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.post("/updateDeviceConfiguration")
+						.content(asJsonString(deviceConfigRequest)).contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.actionPerformed").exists())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.actionPerformed").isBoolean());
+	}
+
+	@Test
+	public void testUpdateDeviceConfiguration_InvalidInputs() throws Exception {
+
+		DeviceConfigurationRequest deviceConfigRequest = new DeviceConfigurationRequest();
+		deviceConfigRequest.setDeviceId(-1);
+
+		doThrow(IllegalArgumentException.class).when(deviceManagementService)
+				.updateDeviceConfiguration(deviceConfigRequest);
+
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.post("/updateDeviceConfiguration")
+						.content(asJsonString(deviceConfigRequest)).contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest()).andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage").exists())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.errorCode").exists());
+	}
 
 	public static String asJsonString(final Object obj) {
 		try {

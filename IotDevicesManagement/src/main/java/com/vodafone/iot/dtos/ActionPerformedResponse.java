@@ -9,6 +9,5 @@ public class ActionPerformedResponse {
 
 	private boolean actionPerformed = true;
 	private String englishMessage = "Action performed successfully";
-	private String arabicMessage = "تمت العمليه بنجاح";
 
 }
