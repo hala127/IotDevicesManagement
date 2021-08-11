@@ -19,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -47,6 +48,9 @@ public class DeviceManagementServiceTest {
 
 	@Mock
 	SimStatusRepository simStatusRepo;
+
+	@Mock
+	Environment env;
 
 	@InjectMocks
 	DeviceManagementService service;
@@ -104,6 +108,49 @@ public class DeviceManagementServiceTest {
 	public void testGetDevicesWaitingForActivation_EmptyBody() {
 
 		assertThrows(IllegalArgumentException.class, () -> service.getDevicesWaitingForActivation(null));
+	}
+
+	@Test
+	public void testGetDevicesAvailableForSale_WithResultList() {
+		Page<Device> devices = new PageImpl<>(new ArrayList<Device>(Arrays.asList(DEVICE_3)), PageRequest.of(0, 10), 1);
+
+		when(env.getRequiredProperty("device.temperature.max.value")).thenReturn("85");
+		when(env.getRequiredProperty("device.temperature.min.value")).thenReturn("25");
+		when(deviceRepo.findAllByTemperatureBetweenAndSimCardIdNotNullOrderByIdDesc(anyInt(), anyInt(),
+				any(Pageable.class))).thenReturn(devices);
+
+		DevicesListDto result = service.getDevicesAvailableForSale(new PagingRequestDto(1, 10));
+
+		assertNotNull(result);
+		assertEquals(devices.getTotalElements(), result.getTotalCount());
+		assertEquals(result.getDevices().get(0).getId(), DEVICE_3.getId());
+	}
+
+	@Test
+	public void testGetDevicesAvailableForSale_EmptyOutput() {
+		Page<Device> devices = new PageImpl<>(new ArrayList<Device>(), PageRequest.of(0, 10), 0);
+
+		when(env.getRequiredProperty("device.temperature.max.value")).thenReturn("85");
+		when(env.getRequiredProperty("device.temperature.min.value")).thenReturn("25");
+		when(deviceRepo.findAllByTemperatureBetweenAndSimCardIdNotNullOrderByIdDesc(anyInt(), anyInt(), any(Pageable.class))).thenReturn(devices);
+
+		DevicesListDto result = service.getDevicesAvailableForSale(new PagingRequestDto(1, 10));
+
+		assertNotNull(result);
+		assertEquals(devices.getTotalElements(), result.getTotalCount());
+	}
+
+	@Test
+	public void testGetDevicesAvailableForSale_InvalidInputs() {
+
+		assertThrows(IllegalArgumentException.class,
+				() -> service.getDevicesAvailableForSale(new PagingRequestDto(0, 10)));
+	}
+
+	@Test
+	public void testGetDevicesAvailableForSale_EmptyBody() {
+
+		assertThrows(IllegalArgumentException.class, () -> service.getDevicesAvailableForSale(null));
 	}
 
 	@Test

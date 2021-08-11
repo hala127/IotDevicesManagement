@@ -15,6 +15,7 @@ public class IotDevicesMapper {
 
 		SimCardStatusDto status = new SimCardStatusDto(device.getSimCard().getStatus().getId(),
 				device.getSimCard().getStatus().getName());
+		
 		return new DeviceDto(device.getId(), device.getTemperature(),
 				device.getSimCard() != null
 						? new SimCardDto(device.getSimCard().getId(), device.getSimCard().getOperatorCode(),
