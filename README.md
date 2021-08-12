@@ -1,7 +1,7 @@
 # Iot Devices Management
 The IotDevicesManagement project provides REST apis to retrieve and manipulate 2 million IOT devices that could be connected to sim cards and monitor those cards' statuses and connect the devices to the sim cards.
 
-## The project is developed using:
+## Built With
 - Spring Boot
 - Maven
 - SQL server database
@@ -11,13 +11,15 @@ The IotDevicesManagement project provides REST apis to retrieve and manipulate 2
 - **updateDeviceConfiguration** to configure a device by updating its temperature and connecting it to a sim card
 - **getDevicesAvailableForSale** to get an ordered list *ordered by id descending* of devices that have the tempereture between 25 and 85 and are connected to sim cards
 
-
-The application uses sql server database which could be created through the provided [DbScript.sql](DbScript.sql) file.
-
-To run the application import it to eclipse and run it as a spring boot application.
-
 The apis could be viewed through swagger2 after running or deploying the application via link  
 http://localhost:8080/swagger-ui.html
-   
+
+## Installation
+To run the application import it to eclipse and run it as a spring boot application
+
+## Database
+The application uses sql server database which could be created through the provided [DbScript.sql](DbScript.sql) file.
+
+## Unit Testing   
 The project contains unit testing for the apis and the service layers using Junit5.
 
