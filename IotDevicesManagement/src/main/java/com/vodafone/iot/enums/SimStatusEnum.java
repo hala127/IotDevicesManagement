@@ -1,4 +1,4 @@
-package com.vodafone.iot.config.enums;
+package com.vodafone.iot.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

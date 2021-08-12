@@ -1,4 +1,4 @@
-package com.vodafone.iot.config.exception;
+package com.vodafone.iot.exception;
 
 import java.util.Date;
 

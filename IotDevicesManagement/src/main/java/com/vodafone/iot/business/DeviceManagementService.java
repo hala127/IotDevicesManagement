@@ -11,10 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.vodafone.iot.config.enums.SimStatusEnum;
-import com.vodafone.iot.config.exception.IotDevicesException;
-import com.vodafone.iot.config.exception.ItemNotFoundException;
-import com.vodafone.iot.config.utils.IotDevicesMapper;
 import com.vodafone.iot.dtos.DeviceDto;
 import com.vodafone.iot.dtos.DevicesListDto;
 import com.vodafone.iot.dtos.requests.DeviceConfigurationRequest;
@@ -22,9 +18,13 @@ import com.vodafone.iot.dtos.requests.PagingRequestDto;
 import com.vodafone.iot.entities.Device;
 import com.vodafone.iot.entities.SimCard;
 import com.vodafone.iot.entities.SimStatus;
+import com.vodafone.iot.enums.SimStatusEnum;
+import com.vodafone.iot.exception.IotDevicesException;
+import com.vodafone.iot.exception.ItemNotFoundException;
 import com.vodafone.iot.repos.DeviceRepository;
 import com.vodafone.iot.repos.SimCardRepository;
 import com.vodafone.iot.repos.SimStatusRepository;
+import com.vodafone.iot.utils.IotDevicesMapper;
 
 import lombok.extern.slf4j.Slf4j;
 

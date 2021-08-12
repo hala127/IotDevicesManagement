@@ -1,4 +1,4 @@
-package com.vodafone.iot.config.utils;
+package com.vodafone.iot.utils;
 
 import com.vodafone.iot.dtos.DeviceDto;
 import com.vodafone.iot.dtos.SimCardDto;

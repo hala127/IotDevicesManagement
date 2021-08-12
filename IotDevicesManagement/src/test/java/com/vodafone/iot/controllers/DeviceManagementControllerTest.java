@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vodafone.iot.business.DeviceManagementService;
-import com.vodafone.iot.config.enums.SimStatusEnum;
+import com.vodafone.iot.enums.SimStatusEnum;
 import com.vodafone.iot.dtos.DeviceDto;
 import com.vodafone.iot.dtos.DevicesListDto;
 import com.vodafone.iot.dtos.SimCardDto;

@@ -1,4 +1,4 @@
-package com.vodafone.iot.config.exception;
+package com.vodafone.iot.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +9,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper=false)
 public class ItemNotFoundException extends RuntimeException {
 
+	private static final long serialVersionUID = 1L;
+	
 	private String errorMessage;
 	private int errorCode;
 

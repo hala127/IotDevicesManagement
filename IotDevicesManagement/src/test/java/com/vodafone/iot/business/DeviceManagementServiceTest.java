@@ -25,7 +25,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import com.vodafone.iot.config.enums.SimStatusEnum;
+import com.vodafone.iot.enums.SimStatusEnum;
 import com.vodafone.iot.dtos.DevicesListDto;
 import com.vodafone.iot.dtos.SimCardDto;
 import com.vodafone.iot.dtos.requests.DeviceConfigurationRequest;
