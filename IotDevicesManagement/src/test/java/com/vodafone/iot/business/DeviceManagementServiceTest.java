@@ -19,6 +19,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -164,7 +166,7 @@ public class DeviceManagementServiceTest {
 
 		when(deviceRepo.findById(anyInt())).thenReturn(Optional.of(DEVICE_1));
 		when(simCardRepo.findById(anyInt())).thenReturn(Optional.of(SIM_1));
-		when(simStatusRepo.findById(anyInt())).thenReturn(Optional.of(SIM_STATUS_WAITING));
+//		when(simStatusRepo.findById(anyInt())).thenReturn(Optional.of(SIM_STATUS_WAITING));
 
 		assertThatCode(() -> service.updateDeviceConfiguration(deviceConfigRequest)).doesNotThrowAnyException();
 	}
