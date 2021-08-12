@@ -15,7 +15,7 @@ The apis could be viewed through swagger2 after running or deploying the applica
 http://localhost:8080/swagger-ui.html
 
 ## Installation
-To run the application import it to eclipse and run it as a spring boot application
+To run the application import the project content under [IotDevicesManagement](IotDevicesManagement) and run it as a spring boot application
 
 ## Database
 The application uses sql server database which could be created through the provided [DbScript.sql](DbScript.sql) file.
