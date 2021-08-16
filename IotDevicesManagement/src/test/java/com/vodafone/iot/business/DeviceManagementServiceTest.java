@@ -39,7 +39,7 @@ import com.vodafone.iot.repos.DeviceRepository;
 import com.vodafone.iot.repos.SimCardRepository;
 import com.vodafone.iot.repos.SimStatusRepository;
 
-//@ExtendWith(MockitoExtension.class)
+@ExtendWith(MockitoExtension.class)
 public class DeviceManagementServiceTest {
 
 	@Mock
